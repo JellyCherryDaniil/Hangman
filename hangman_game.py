@@ -40,7 +40,7 @@ class HangmanGame:
         if symbol in self.answer:
             new_word = list(self.word)
             for index in range(len(self.answer)):
-                if  self.answer[index] == symbol:
+                if self.answer[index] == symbol:
                     new_word[index] = symbol
             self.word = "".join(new_word)
         else:
