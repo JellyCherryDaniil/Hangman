@@ -59,12 +59,24 @@ class HangmanGame:
             if "#" not in self.word:
                 self.game_over("ПОБЕДА")
             return True
-        else:
-            self.health -= 1
-            if self.health == 0:
-                self.game_over("проиграли")
-            return False
+        self.decrease_health()
+        return False
 
+    def guess_word(self, word) -> bool:
+        if word == self.answer:
+            self.game_over("ПОБЕДА")
+            return True
+        self.decrease_health()
+        return False
+
+    def decrease_health(self):
+        """
+        Уменьшает жизнь игрока
+        :return:
+        """
+        self.health -= 1
+        if self.health == 0:
+            self.game_over("проиграли")
     def game_over(self, status="подготовка"):
         """
         Метод закачивает игру
