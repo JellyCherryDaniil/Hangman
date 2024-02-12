@@ -1,102 +1,13 @@
 from random import choice
-# GAME_THEME = "Животное"
-# test_tuple = (1, 2, 3, 4,"Hello", True)
-# test_tuple
-HANGMAN1_STR = (
-    "        $$$$$$$$$$$$$$$\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    " $$$$$$$$$$$$$$$$$$$$$$$$$$$$\n"
-    " $                          $\n"
-)
-HANGMAN2_STR = (
-    "        $$$$$$$$$$$$$$$\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        O             $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    " $$$$$$$$$$$$$$$$$$$$$$$$$$$$\n"
-    " $                          $\n"
-)
-HANGMAN3_STR = (
-    "        $$$$$$$$$$$$$$$\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        O             $\n"
-    "      /   \\           $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    " $$$$$$$$$$$$$$$$$$$$$$$$$$$$\n"
-    " $                          $\n"
-)
-HANGMAN4_STR = (
-    "        $$$$$$$$$$$$$$$\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        O             $\n"
-    "      / | \\           $\n"
-    "        |             $\n"
-    "                      $\n"
-    "                      $\n"
-    "                      $\n"
-    " $$$$$$$$$$$$$$$$$$$$$$$$$$$$\n"
-    " $                          $\n"
-)
-HANGMAN5_STR = (
-    "        $$$$$$$$$$$$$$$\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        |             $\n"
-    "        O             $\n"
-    "      / | \\           $\n"
-    "        |             $\n"
-    "       / \\            $\n"
-    "                      $\n"
-    "                      $\n"
-    " $$$$$$$$$$$$$$$$$$$$$$$$$$$$\n"
-    " $                          $\n"
-)
-WORDS_TUPLE = (
-    ("ХИМИЧЕСКИЙ ЭЛЕМЕНТ", "АРГОН"),
-    ("ХИМИЧЕСКИЙ ЭЛЕМЕНТ", "АСТАТ"),
-    ("ХИМИЧЕСКИЙ ЭЛЕМЕНТ", "БАРИЙ"),
-    ("ХИМИЧЕСКИЙ ЭЛЕМЕНТ", "БОРИЙ"),
-    ("ХИМИЧЕСКИЙ ЭЛЕМЕНТ", "ГЕЛИЙ"),
-    ("ХИМИЧЕСКИЙ ЭЛЕМЕНТ", "ИНДИЙ"),
-    ("ТКАНЬ", "АКРИЛ"),
-    ("ТКАНЬ", "АТЛАС"),
-    ("ТКАНЬ", "БАЙКА"),
-    ("ТКАНЬ", "БАРЕЖ"),
-    ("ТКАНЬ", "БУРЕТ"),
-    ("ТКАНЬ", "ВЕЛЮР"),
-    ("СОРТ СЫРА", "АНАРИ"),
-    ("СОРТ СЫРА", "БАНОН"),
-    ("СОРТ СЫРА", "БОФОР"),
-    ("СОРТ СЫРА", "ВИОЛА"),
-    ("СОРТ СЫРА", "ГАУДА"),
-    ("СОРТ СЫРА", "ДАНБО"),
-)
+from pathlib import PurePath
+from file_processor import read_file, read_data
+
+HANGMAN1_STR = read_file(PurePath("data") / "HANGMAN1.txt")
+HANGMAN2_STR = read_file(PurePath("data") / "HANGMAN2.txt")
+HANGMAN3_STR = read_file(PurePath("data") / "HANGMAN3.txt")
+HANGMAN4_STR = read_file(PurePath("data") / "HANGMAN4.txt")
+HANGMAN5_STR = read_file(PurePath("data") / "HANGMAN5.txt")
+WORDS_TUPLE = read_data(PurePath("data") / "WORDS_AND_THEMES.txt")
 
 
 class HangmanGame:
