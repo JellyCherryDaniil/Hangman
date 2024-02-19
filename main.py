@@ -1,6 +1,6 @@
 from hangman_game import HangmanGame
 
-def play_hangman(symbol,game, is_symbol):
+def play_hangman(symbol, game, is_symbol):
     """
 
     Шаг игры Hangman
@@ -19,7 +19,7 @@ def play_hangman(symbol,game, is_symbol):
         print(game.word)
     else:
         print("Вы не угадали\n"
-              f"Слово: {game.word}\n")
+              f"Слово:{game.word}\n")
         print(game.show_hangman())
 
     if game.status == "ПОБЕДА":
@@ -43,11 +43,11 @@ def main():
               f"Тема игры: {game.theme}\n"
               f"Отгадайте слово: {game.word}")
         while not game_over:
-            symbol = input("Введите букву или слово целиком: \n")
+            symbol = input("Введите букву или слово целиком:\n")
             symbol = symbol.lower()
 
             if len(symbol) == 1 and symbol.isalpha():
-                play_hangman(symbol,game,True)
+                play_hangman(symbol, game, True)
             elif len(symbol) > 1 and symbol.isalpha():
                 play_hangman(symbol, game, False)
             else:
