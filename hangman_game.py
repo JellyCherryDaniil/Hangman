@@ -41,7 +41,7 @@ class HangmanGame:
         self.health = 5
         question_word = choice(WORDS_TUPLE)
         self.theme = question_word[0].capitalize()
-        self.answer = question_word[1].lower()
+        self.answer = question_word[1].lower().strip()
         self.word = "#" * len(self.answer)
 
     def guess(self, symbol) -> bool:
@@ -77,6 +77,7 @@ class HangmanGame:
         self.health -= 1
         if self.health == 0:
             self.game_over("проиграли")
+
     def game_over(self, status="подготовка"):
         """
         Метод закачивает игру
