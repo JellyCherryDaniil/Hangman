@@ -1,13 +1,13 @@
 from hangman_game import HangmanGame
 
-def play_hangman(symbol, game, is_symbol):
+def play_hangman(symbol, game, is_symbol) -> bool:
     """
 
     Шаг игры Hangman
     :param symbol: Загаданное слово или буква
     :param game: объект типа HangmanGame
     :param is_symbol: является ли введёное буквой
-    :return:
+    :return: возвращает результат игры
     """
 
     if is_symbol:
@@ -24,10 +24,11 @@ def play_hangman(symbol, game, is_symbol):
 
     if game.status == "ПОБЕДА":
         print("\nВы выиграли")
-        game_over = True
+        return True
     elif game.status == "проиграли":
         print("\nВы проиграли")
-        game_over = True
+        return True
+    return False
 
 
 def main():
@@ -35,11 +36,13 @@ def main():
     Точка входа в приложение
     :return:
     """
-    while True:
+    programm_over = False
+    while not programm_over:
         game_over = False
         game = HangmanGame()
         game.start()
-        print("Игра начинается \n"
+        print("\n------------------------------\n"
+              "Игра начинается \n"
               f"Тема игры: {game.theme}\n"
               f"Отгадайте слово: {game.word}")
         while not game_over:
@@ -47,11 +50,17 @@ def main():
             symbol = symbol.lower()
 
             if len(symbol) == 1 and symbol.isalpha():
-                play_hangman(symbol, game, True)
+                game_over = play_hangman(symbol, game, True)
             elif len(symbol) > 1 and symbol.isalpha():
-                play_hangman(symbol, game, False)
+                game_over = play_hangman(symbol, game, False)
             else:
                 print("Введите, пожалуйста, букву или целое слово!")
+        continuation = input("Хотите продолжить? (Введите да, чтобы продолжить)\n")
+        continuation = continuation.lower()
+        if continuation != "да":
+            programm_over = True
+
+
 
 
 if __name__ == "__main__":
