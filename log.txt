@@ -1,0 +1,78 @@
+2024-03-26 21:46:02,125 : INFO - echo_handler: 132 - Пользователь ввел неправильную команду: gdfgd
+2024-03-26 21:46:02,672 : INFO - feed_update: 172 - Update id=120415201 is handled. Duration 546 ms by bot id=7165501248
+2024-03-26 21:46:11,196 : INFO - start_polling: 554 - Polling stopped
+2024-03-26 21:46:11,452 : INFO - _polling: 359 - Polling stopped for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:49:22,102 : INFO - start_polling: 527 - Start polling
+2024-03-26 21:49:22,613 : INFO - _polling: 341 - Run polling for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:49:23,369 : INFO - feed_update: 172 - Update id=120415202 is handled. Duration 594 ms by bot id=7165501248
+2024-03-26 21:49:26,496 : INFO - feed_update: 172 - Update id=120415203 is handled. Duration 375 ms by bot id=7165501248
+2024-03-26 21:49:53,315 : INFO - start_polling: 554 - Polling stopped
+2024-03-26 21:49:53,566 : INFO - _polling: 359 - Polling stopped for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:56:06,204 : INFO - start_polling: 527 - Start polling
+2024-03-26 21:56:06,684 : INFO - _polling: 341 - Run polling for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:56:07,415 : INFO - feed_update: 172 - Update id=120415204 is handled. Duration 562 ms by bot id=7165501248
+2024-03-26 21:56:15,580 : INFO - feed_update: 172 - Update id=120415205 is handled. Duration 359 ms by bot id=7165501248
+2024-03-26 21:56:26,326 : INFO - feed_update: 172 - Update id=120415206 is handled. Duration 250 ms by bot id=7165501248
+2024-03-26 21:57:52,351 : INFO - start_polling: 554 - Polling stopped
+2024-03-26 21:57:52,601 : INFO - _polling: 359 - Polling stopped for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:57:55,565 : INFO - start_polling: 527 - Start polling
+2024-03-26 21:57:56,018 : INFO - _polling: 341 - Run polling for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:58:00,481 : INFO - feed_update: 172 - Update id=120415207 is handled. Duration 717 ms by bot id=7165501248
+2024-03-26 21:58:05,283 : INFO - feed_update: 172 - Update id=120415208 is handled. Duration 172 ms by bot id=7165501248
+2024-03-26 21:58:12,122 : INFO - feed_update: 172 - Update id=120415209 is handled. Duration 172 ms by bot id=7165501248
+2024-03-26 21:58:36,491 : INFO - start_polling: 554 - Polling stopped
+2024-03-26 21:58:36,742 : INFO - _polling: 359 - Polling stopped for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:58:39,751 : INFO - start_polling: 527 - Start polling
+2024-03-26 21:58:40,258 : INFO - _polling: 341 - Run polling for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 21:58:41,334 : INFO - feed_update: 172 - Update id=120415210 is not handled. Duration 0 ms by bot id=7165501248
+2024-03-26 21:58:41,334 : ERROR - _process_update: 315 - Cause exception while process update id=120415210 by bot id=7165501248
+AttributeError: 'NoneType' object has no attribute 'game_over'
+Traceback (most recent call last):
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 148, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Daniil\PycharmProjects\Hangman\run_bot.py", line 120, in command_stop_game_handler
+    game.game_over()
+    ^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'game_over'
+2024-03-26 22:00:54,621 : INFO - start_polling: 554 - Polling stopped
+2024-03-26 22:00:54,872 : INFO - _polling: 359 - Polling stopped for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 22:00:57,747 : INFO - start_polling: 527 - Start polling
+2024-03-26 22:00:58,216 : INFO - _polling: 341 - Run polling for bot @MegaGame_Hangman_bot id=7165501248 - 'Hangman'
+2024-03-26 22:01:01,051 : INFO - feed_update: 172 - Update id=120415211 is handled. Duration 545 ms by bot id=7165501248
