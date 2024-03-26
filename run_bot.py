@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import sys
+from logging.handlers import TimedRotatingFileHandler
 from os import getenv
 
 from aiogram import Bot, Dispatcher, Router, types
@@ -17,8 +18,9 @@ TOKEN = getenv("BOT_TOKEN")
 # All handlers should be attached to the Router (or Dispatcher)
 dp = Dispatcher()
 game_status = "запуск"
-game = None
-
+game: HangmanGame = None
+# https://docs.python.org/3/library/logging.html#formatter-objects
+FORMAT_LOG = "%(asctime)s : %(levelname)s - %(funcName)s: %(lineno)d - %(message)s"
 
 
 def play_hangman(message, game, is_symbol) -> bool:
@@ -48,7 +50,7 @@ async def command_start_handler(message: Message) -> None:
 
 
 @dp.message(Command("start_game"))
-async def command_start_handler(message: Message) -> None:
+async def command_start_game_handler(message: Message) -> None:
     """
     Команда запуска игры
     :param message: Сообщение из телеграмма
@@ -105,9 +107,26 @@ async def process_game(message: Message, game) -> None:
         game_status = "перезапуск"
 
 
+@dp.message(Command("stop_game"))
+async def command_stop_game_handler(message: Message) -> None:
+    """
+    Команда остановки игры
+    :param message: Сообщение из телеграмма
+    :return:
+    """
+    global game_status, game
+
+    if game is not None:
+        game_status = "запуск"
+        game.game_over()
+        await message.answer("Игра закончена")
+    else:
+        await message.answer("Игра не запущена")
+
+
 
 @dp.message()
-async def echo_handler(message: Message) -> None:
+async def text_handler(message: Message) -> None:
     """
     Handler will forward receive a message back to the sender
 
@@ -122,15 +141,18 @@ async def echo_handler(message: Message) -> None:
         elif game_status == "перезапуск":
             continuation = message.text.lower()
             if continuation == "да":
-                await command_start_handler(message)
+                await command_start_game_handler(message)
             else:
                 game_status = "запуск"
 
         else:
+            logging.info(f"Пользователь ввел неправильную команду: {message.text}")
             await message.answer(f"Я ничего не понимаю!")
-    except TypeError:
+    except Exception as exception:
+        logging.error(f"Произошла ошибка текстового ввода :{exception}")
         # But not all the types is supported to be copied so need to handle it
         await message.answer("Произошла ошибка!")
+
 
 
 async def main() -> None:
@@ -141,5 +163,11 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+
+    # file_handler = logging.FileHandler("log.txt", 'a', 'utf-8')
+    handler = TimedRotatingFileHandler(filename="log.txt", when='D', interval=1, backupCount=1, encoding='utf-8',
+                                       delay=False)
+    logging.basicConfig(level=logging.INFO, handlers=[handler],
+                        format=FORMAT_LOG)
+    print("Бот работает")
     asyncio.run(main())
