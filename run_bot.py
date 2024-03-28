@@ -7,14 +7,14 @@ from os import getenv
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message
+from aiogram.types import Message, InputFile
 from aiogram.utils.markdown import hbold
 
 from hangman_game import HangmanGame
 
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN = getenv("BOT_TOKEN")
-
+bot: Bot = None
 # All handlers should be attached to the Router (or Dispatcher)
 dp = Dispatcher()
 game_status = "запуск"
@@ -35,7 +35,6 @@ def play_hangman(message, game, is_symbol) -> bool:
     message_text = message.text.lower()
 
 
-
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
@@ -46,7 +45,28 @@ async def command_start_handler(message: Message) -> None:
     # and the target chat will be passed to :ref:`aiogram.methods.send_message.SendMessage`
     # method automatically or call API method directly via
     # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
-    await message.answer(f"Hello, {message.from_user.full_name}!")
+    button_start = [
+        [types.KeyboardButton(text="Запуск игры")],
+        [types.KeyboardButton(text="Справка")]
+    ]
+    keyboard = types.ReplyKeyboardMarkup(keyboard=button_start)
+
+    await message.answer("Главное меню", reply_markup=keyboard)
+
+    # await message.answer(f"Hello, {message.from_user.full_name}!")
+
+
+def return_keyboard():
+    """
+    Возвращает возможность использование кнопок
+    :return:
+    """
+    button_start = [
+        [types.KeyboardButton(text="Стоп")],
+        [types.KeyboardButton(text="Перезапуск")]
+    ]
+    keyboard = types.ReplyKeyboardMarkup(keyboard=button_start)
+    return keyboard
 
 
 @dp.message(Command("start_game"))
@@ -64,7 +84,7 @@ async def command_start_game_handler(message: Message) -> None:
     await message.answer("Игра начинается \n"
                         f"Тема игры: {game.theme}\n"
                         f"Отгадайте слово: {game.word}")
-    await message.answer("Введите букву или слово целиком:")
+    await message.answer("Введите букву или слово целиком:", reply_markup=return_keyboard())
 
 
 async def process_game(message: Message, game) -> None:
@@ -92,7 +112,8 @@ async def process_game(message: Message, game) -> None:
     else:
         await message.answer("Вы не угадали\n"
               f"Слово:{game.word}\n")
-        await message.answer(game.show_hangman())
+        photo = types.FSInputFile(game.return_hangman_image())
+        await bot.send_photo(chat_id=message.chat.id, photo=photo)
 
     if game.status == "ПОБЕДА":
         await message.answer("Вы выиграли")
@@ -136,7 +157,12 @@ async def text_handler(message: Message) -> None:
     try:
         # Send a copy of the received message
         # await message.send_copy(chat_id=message.chat.id)
-        if game_status == "начало":
+
+        if game_status == "начало" and message.text == "Стоп":
+            await command_stop_game_handler(message)
+        elif game_status == "начало" and message.text == "Перезапуск":
+            await command_start_game_handler(message)
+        elif game_status == "начало":
             await process_game(message, game)
         elif game_status == "перезапуск":
             continuation = message.text.lower()
@@ -144,7 +170,8 @@ async def text_handler(message: Message) -> None:
                 await command_start_game_handler(message)
             else:
                 game_status = "запуск"
-
+        elif game_status == "запуск" and message.text == "Запуск игры":
+            await command_start_game_handler(message)
         else:
             logging.info(f"Пользователь ввел неправильную команду: {message.text}")
             await message.answer(f"Я ничего не понимаю!")
@@ -154,9 +181,9 @@ async def text_handler(message: Message) -> None:
         await message.answer("Произошла ошибка!")
 
 
-
 async def main() -> None:
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
+    global bot
     bot = Bot(TOKEN)
     # And the run events dispatching
     await dp.start_polling(bot)
