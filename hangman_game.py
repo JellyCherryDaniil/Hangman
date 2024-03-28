@@ -7,6 +7,11 @@ HANGMAN2_STR = read_file(PurePath("data") / "HANGMAN2.txt")
 HANGMAN3_STR = read_file(PurePath("data") / "HANGMAN3.txt")
 HANGMAN4_STR = read_file(PurePath("data") / "HANGMAN4.txt")
 HANGMAN5_STR = read_file(PurePath("data") / "HANGMAN5.txt")
+HANGMAN1_JPEG = PurePath("data") / "HANGMAN1.jpg"
+HANGMAN2_JPEG = PurePath("data") / "HANGMAN2.jpg"
+HANGMAN3_JPEG = PurePath("data") / "HANGMAN3.jpg"
+HANGMAN4_JPEG = PurePath("data") / "HANGMAN4.jpg"
+HANGMAN5_JPEG = PurePath("data") / "HANGMAN5.jpg"
 WORDS_TUPLE = read_data(PurePath("data") / "WORDS_AND_THEMES.txt")
 
 
@@ -103,5 +108,25 @@ class HangmanGame:
                 return HANGMAN4_STR
             case 0:
                 return HANGMAN5_STR
+
+        return ""
+
+    def return_hangman_image(self):
+        """
+        Отрисовка висельника из символов
+        :return:
+        """
+
+        match self.health:
+            case 4:
+                return HANGMAN1_JPEG
+            case 3:
+                return HANGMAN2_JPEG
+            case 2:
+                return HANGMAN3_JPEG
+            case 1:
+                return HANGMAN4_JPEG
+            case 0:
+                return HANGMAN5_JPEG
 
         return ""
