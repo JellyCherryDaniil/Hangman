@@ -15,6 +15,12 @@ HANGMAN5_JPEG = PurePath("data") / "HANGMAN5.jpg"
 WORDS_TUPLE = read_data(PurePath("data") / "WORDS_AND_THEMES.txt")
 
 
+STATUS_PREPARE = "подготовка"
+STATUS_INPROGRESS = "идет игра"
+STATUS_VICTORY = "ПОБЕДА"
+STATUS_DEFEAT = "проиграли"
+
+
 class HangmanGame:
     """
     Описывает класс игры виселицы
@@ -34,14 +40,14 @@ class HangmanGame:
         self.word = ""
         self.theme = ""
         self.answer = ""
-        self.status = "подготовка"
+        self.status = STATUS_PREPARE
 
     def start(self):
         """
         Запуск игры
         :return:
         """
-        self.status = "идет игра"
+        self.status = STATUS_INPROGRESS
         self.started = True
         self.health = 5
         question_word = choice(WORDS_TUPLE)
@@ -62,14 +68,14 @@ class HangmanGame:
                     new_word[index] = symbol
             self.word = "".join(new_word)
             if "#" not in self.word:
-                self.game_over("ПОБЕДА")
+                self.game_over(STATUS_VICTORY)
             return True
         self.decrease_health()
         return False
 
     def guess_word(self, word) -> bool:
         if word == self.answer:
-            self.game_over("ПОБЕДА")
+            self.game_over(STATUS_VICTORY)
             return True
         self.decrease_health()
         return False
@@ -81,9 +87,9 @@ class HangmanGame:
         """
         self.health -= 1
         if self.health == 0:
-            self.game_over("проиграли")
+            self.game_over(STATUS_DEFEAT)
 
-    def game_over(self, status="подготовка"):
+    def game_over(self, status=STATUS_PREPARE):
         """
         Метод закачивает игру
         :return:
