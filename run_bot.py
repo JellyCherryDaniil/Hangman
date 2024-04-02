@@ -10,15 +10,19 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, InputFile
 from aiogram.utils.markdown import hbold
 
-from hangman_game import HangmanGame
+from game_manager import GameManager
+from hangman_game import HangmanGame, STATUS_VICTORY,STATUS_INPROGRESS,STATUS_DEFEAT,STATUS_PREPARE
 
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN = getenv("BOT_TOKEN")
 bot: Bot = None
 # All handlers should be attached to the Router (or Dispatcher)
 dp = Dispatcher()
-game_status = "запуск"
-game: HangmanGame = None
+
+# game_status = "запуск"
+# game: HangmanGame = None
+
+game_manager = GameManager()
 # https://docs.python.org/3/library/logging.html#formatter-objects
 FORMAT_LOG = "%(asctime)s : %(levelname)s - %(funcName)s: %(lineno)d - %(message)s"
 
@@ -76,11 +80,8 @@ async def command_start_game_handler(message: Message) -> None:
     :param message: Сообщение из телеграмма
     :return:
     """
-    global game_status, game
-
-    game_status = "начало"
-    game = HangmanGame()
-    game.start()
+    global game_manager
+    game = game_manager.create_game(message.from_user.id)
     await message.answer("Игра начинается \n"
                         f"Тема игры: {game.theme}\n"
                         f"Отгадайте слово: {game.word}")
@@ -115,17 +116,15 @@ async def process_game(message: Message, game) -> None:
         photo = types.FSInputFile(game.return_hangman_image())
         await bot.send_photo(chat_id=message.chat.id, photo=photo)
 
-    if game.status == "ПОБЕДА":
+    if game.status == STATUS_VICTORY:
         await message.answer("Вы выиграли")
         game_over = True
-    elif game.status == "проиграли":
+    elif game.status == STATUS_DEFEAT:
         await message.answer("Вы проиграли")
         game_over = True
 
     if game_over:
-        global game_status
         await message.answer("Хотите продолжить? (Введите да, чтобы продолжить)")
-        game_status = "перезапуск"
 
 
 @dp.message(Command("stop_game"))
@@ -135,10 +134,9 @@ async def command_stop_game_handler(message: Message) -> None:
     :param message: Сообщение из телеграмма
     :return:
     """
-    global game_status, game
-
+    global game_manager
+    game = game_manager.get_game(message.from_user.id)
     if game is not None:
-        game_status = "запуск"
         game.game_over()
         await message.answer("Игра закончена")
     else:
@@ -153,24 +151,26 @@ async def text_handler(message: Message) -> None:
 
     By default, message handler will handle all message types (like a text, photo, sticker etc.)
     """
-    global game, game_status
+    global game_manager
+    game:HangmanGame = game_manager.get_game(message.from_user.id)
+    game_status = game.status if game is not None else None
+
+
     try:
         # Send a copy of the received message
         # await message.send_copy(chat_id=message.chat.id)
 
-        if game_status == "начало" and message.text == "Стоп":
+        if game_status == STATUS_INPROGRESS and message.text == "Стоп":
             await command_stop_game_handler(message)
-        elif game_status == "начало" and message.text == "Перезапуск":
+        elif game_status == STATUS_INPROGRESS and message.text == "Перезапуск":
             await command_start_game_handler(message)
-        elif game_status == "начало":
+        elif game_status == STATUS_INPROGRESS:
             await process_game(message, game)
-        elif game_status == "перезапуск":
+        elif any(game_status == st for st in (STATUS_VICTORY, STATUS_DEFEAT)):
             continuation = message.text.lower()
             if continuation == "да":
                 await command_start_game_handler(message)
-            else:
-                game_status = "запуск"
-        elif game_status == "запуск" and message.text == "Запуск игры":
+        elif message.text == "Запуск игры":
             await command_start_game_handler(message)
         else:
             logging.info(f"Пользователь ввел неправильную команду: {message.text}")
